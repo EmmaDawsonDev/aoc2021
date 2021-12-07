@@ -2,17 +2,18 @@ const data = `1101,1,29,67,1102,0,1,65,1008,65,35,66,1005,66,28,1,67,65,20,4,0,1
 
 const dataArr = data.split(',')
 
-let fuel = 10000000000000000
+let fuel = 10000000000000000000000000000000000000000
 
 for (let i = 0; i < dataArr.length; i++) {
   let temp = 0
   for (let j = 0; j < dataArr.length; j++) {
     let difference = Math.abs(dataArr[j] - i)
-    temp += difference
+    let triangularDiff = (difference * (difference + 1)) / 2
+    temp += triangularDiff
   }
   if (temp < fuel) {
     fuel = temp
   }
 }
 
-console.log(fuel) // 342534
+console.log(fuel) // Part 1: 342534 //Part 2: 94004208
