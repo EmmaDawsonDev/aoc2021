@@ -1,3 +1,14 @@
+// const data = `be cfbegad cbdgef fgaecd cgeb fdcge agebfd fecdb fabcd edb | fdgacbe cefdb cefbgd gcbe
+// edbfga begcd cbg gc gcadebf fbgde acbgfd abcde gfcbed gfec | fcgedb cgb dgebacf gc
+// fgaebd cg bdaec gdafb agbcfd gdcbef bgcad gfac gcb cdgabef | cg cg fdcagb cbg
+// fbegcd cbd adcefb dageb afcb bc aefdc ecdab fgdeca fcdbega | efabcd cedba gadfec cb
+// aecbfdg fbg gf bafeg dbefa fcge gcbea fcaegb dgceab fcbdga | gecf egdcabf bgf bfgea
+// fgeab ca afcebg bdacfeg cfaedg gcfdb baec bfadeg bafgc acf | gebdcfa ecba ca fadegcb
+// dbcfg fgd bdegcaf fgec aegbdf ecdfab fbedc dacgb gdcebf gf | cefg dcbef fcge gbcadfe
+// bdfegc cbegaf gecbf dfcage bdacg ed bedf ced adcbefg gebcd | ed bcgafe cdgba cbgef
+// egadfb cdbfeg cegd fecab cgb gbdefca cg fgcdab egfdb bfceg | gbdfcae bgc cg cgb
+// gcafb gcf dcaebfg ecagb gf abcdeg gaef cafbge fdbac fegbdc | fgae cfgab fg bagce`
+
 const data = `dcagfb cbegda cabdf bagedf dcb cd dcbegaf aebcf bgdaf dgcf | dacebgf cbafd dbacf cdgf
 dfgbc ceagbd egb cgdae eafcgd ecbgd eb aefbgcd bfaceg deba | baed ecabgd aebd cadfebg
 acbd bagfec bedcf efbca dbfecag gadcfe dc dbcaef cde fbegd | deacfg bfagcde bgedf cde
@@ -200,9 +211,11 @@ gebfd cfedga begfa dagbfc fgeadcb ecdgbf bced edfgc dgb db | dbec gadcfb db aefb
 dbcg fbagc bcf bc cdaebgf aegbdf faecg fdcaeb cdafbg afbgd | adfbg fadebgc dgbafc febagd`
 
 const dataArr1 = data.split('\n')
-const dataArr2 = dataArr1.map(el => el.split('| '))
+const dataArr2 = dataArr1.map(el => el.split(' | '))
 const output = dataArr2.map(el => el[1])
 const outputSplit = output.map(el => el.split(' '))
+const decode = dataArr2.map(el => el[0])
+const decodeSplit = decode.map(el => el.split(' '))
 
 let count = 0
 
@@ -219,4 +232,119 @@ for (let i = 0; i < outputSplit.length; i++) {
   }
 }
 
-console.log(count) // Part 1 = 409
+// console.log(count) // Part 1 = 409
+
+// console.log(decodeSplit)
+
+let outputNum = []
+
+for (let i = 0; i < decodeSplit.length; i++) {
+  let one = ''
+  let two = ''
+  let three = ''
+  let four = ''
+  let five = ''
+  let six = ''
+  let seven = ''
+  let eight = ''
+  let nine = ''
+  let zero = ''
+  // Find one
+  let temp = decodeSplit[i].filter(el => el.length === 2)
+  one = temp[0].split('').sort().join('')
+  let index = decodeSplit[i].findIndex(el => el === temp[0])
+  decodeSplit[i].splice(index, 1)
+  // Find 4
+  temp = decodeSplit[i].filter(el => el.length === 4)
+  four = temp[0].split('').sort().join('')
+  index = decodeSplit[i].findIndex(el => el === temp[0])
+  decodeSplit[i].splice(index, 1)
+  // Find 7
+  temp = decodeSplit[i].filter(el => el.length === 3)
+  seven = temp[0].split('').sort().join('')
+  index = decodeSplit[i].findIndex(el => el === temp[0])
+  decodeSplit[i].splice(index, 1)
+  // Find 8
+  temp = decodeSplit[i].filter(el => el.length === 7)
+  eight = temp[0].split('').sort().join('')
+  index = decodeSplit[i].findIndex(el => el === temp[0])
+  decodeSplit[i].splice(index, 1)
+  //Find 3
+  temp = decodeSplit[i].filter(el => el.length === 5 && el.includes(one[0]) && el.includes(one[1]))
+  three = temp[0].split('').sort().join('')
+  index = decodeSplit[i].findIndex(el => el === temp[0])
+  decodeSplit[i].splice(index, 1)
+  // Find 9
+  temp = decodeSplit[i].filter(
+    el =>
+      el.length === 6 &&
+      el.includes(three[0]) &&
+      el.includes(three[1]) &&
+      el.includes(three[2]) &&
+      el.includes(three[3]) &&
+      el.includes(three[4])
+  )
+  nine = temp[0].split('').sort().join('')
+  index = decodeSplit[i].findIndex(el => el === temp[0])
+  decodeSplit[i].splice(index, 1)
+  // Find 0
+  temp = decodeSplit[i].filter(el => el.length === 6 && el.includes(one[0]) && el.includes(one[1]))
+  zero = temp[0].split('').sort().join('')
+  index = decodeSplit[i].findIndex(el => el === temp[0])
+  decodeSplit[i].splice(index, 1)
+  // Find 6
+  temp = decodeSplit[i].filter(el => el.length === 6)
+  six = temp[0].split('').sort().join('')
+  index = decodeSplit[i].findIndex(el => el === temp[0])
+  decodeSplit[i].splice(index, 1)
+
+  //Find 5
+  temp = decodeSplit[i].filter(
+    el => el.length === 5 && six.includes(el[0]) && six.includes(el[1]) && six.includes(el[2]) && six.includes(el[3]) && six.includes(el[4])
+  )
+
+  five = temp[0].split('').sort().join('')
+  index = decodeSplit[i].findIndex(el => el === temp[0])
+  decodeSplit[i].splice(index, 1)
+  // Find 2
+  two = decodeSplit[i][0].split('').sort().join('')
+
+  let num = []
+  for (let j = 0; j < outputSplit[i].length; j++) {
+    if (outputSplit[i][j].split('').sort().join('') === one) {
+      num.push(1)
+    }
+    if (outputSplit[i][j].split('').sort().join('') === two) {
+      num.push(2)
+    }
+    if (outputSplit[i][j].split('').sort().join('') === three) {
+      num.push(3)
+    }
+    if (outputSplit[i][j].split('').sort().join('') === four) {
+      num.push(4)
+    }
+    if (outputSplit[i][j].split('').sort().join('') === five) {
+      num.push(5)
+    }
+    if (outputSplit[i][j].split('').sort().join('') === six) {
+      num.push(6)
+    }
+    if (outputSplit[i][j].split('').sort().join('') === seven) {
+      num.push(7)
+    }
+    if (outputSplit[i][j].split('').sort().join('') === eight) {
+      num.push(8)
+    }
+    if (outputSplit[i][j].split('').sort().join('') === nine) {
+      num.push(9)
+    }
+    if (outputSplit[i][j].split('').sort().join('') === zero) {
+      num.push(0)
+    }
+  }
+  outputNum.push(num.join(''))
+  console.log(one, two, three, four, five, six, seven, eight, nine, zero)
+}
+
+const total = outputNum.reduce((a, b) => a + +b, 0)
+console.log(total) // 1024649
