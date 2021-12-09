@@ -99,9 +99,16 @@ const data = `865443478943244698765432105678923567895324579876421245678965656897
 9899321296542135679889798999843215789987987424567893212456987654345987654575678931235969901867963344
 9965410987321024589999899998765676891299876535678975324667897643245698867686789210123456892378954467`
 
+// const data = `2199943210
+// 3987894921
+// 9856789892
+// 8767896789
+// 9899965678`
+
 const dataArr = data.split('\n')
 
 let lowPoints = []
+let lowPointCoords = []
 
 for (let i = 0; i < dataArr.length; i++) {
   for (let j = 0; j < dataArr[i].length; j++) {
@@ -120,10 +127,58 @@ for (let i = 0; i < dataArr.length; i++) {
     // if (down === undefined) down = Infinity
     // if (left === undefined) left = Infinity
     // if (right === undefined) right = Infinity
-    if (current < up && current < down && current < left && current < right) lowPoints.push(current + 1)
+    if (current < up && current < down && current < left && current < right) {
+      lowPoints.push(current + 1)
+      lowPointCoords.push([i, j])
+    }
   }
 }
 
 const totalRisk = lowPoints.reduce((a, b) => a + b, 0)
 
-console.log(totalRisk) // Part 1 : 439
+// console.log(totalRisk) // Part 1 : 439
+
+const basinSizes = []
+
+for (let i = 0; i < lowPointCoords.length; i++) {
+  const x = lowPointCoords[i][0]
+  const y = lowPointCoords[i][1]
+  let visited = [`${x},${y}`]
+  for (let j = 0; j < visited.length; j++) {
+    let visitedArr = visited[j].split(',')
+
+    let visitedX = +visitedArr[0]
+    let visitedY = +visitedArr[1]
+
+    if (
+      visitedX - 1 >= 0 &&
+      dataArr[visitedX - 1][visitedY] !== '9' &&
+      dataArr[visitedX - 1][visitedY] !== undefined &&
+      !visited.includes(`${visitedX - 1},${visitedY}`)
+    )
+      visited.push(`${visitedX - 1},${visitedY}`)
+    if (
+      visitedX + 1 < dataArr.length &&
+      dataArr[visitedX + 1][visitedY] !== '9' &&
+      dataArr[visitedX + 1][visitedY] !== undefined &&
+      !visited.includes(`${visitedX + 1},${visitedY}`)
+    )
+      visited.push(`${visitedX + 1},${visitedY}`)
+    if (
+      dataArr[visitedX][visitedY - 1] !== '9' &&
+      dataArr[visitedX][visitedY - 1] !== undefined &&
+      !visited.includes(`${visitedX},${visitedY - 1}`)
+    )
+      visited.push(`${visitedX},${visitedY - 1}`)
+    if (
+      dataArr[visitedX][visitedY + 1] !== '9' &&
+      dataArr[visitedX][visitedY + 1] !== undefined &&
+      !visited.includes(`${visitedX},${visitedY + 1}`)
+    )
+      visited.push(`${visitedX},${visitedY + 1}`)
+  }
+  basinSizes.push(visited.length)
+}
+
+basinSizes.sort((a, b) => a - b)
+console.log(basinSizes[basinSizes.length - 1] * basinSizes[basinSizes.length - 2] * basinSizes[basinSizes.length - 3]) // Part 2: 900900
