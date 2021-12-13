@@ -1049,9 +1049,9 @@ const folds = dataArr[1].split('\n')
 const folds1 = folds.map(el => el.split(' '))
 const folds2 = folds1.map(el => el[2].split('='))
 
-console.log(coords1)
 
-for (let i = 0; i < 1; i++) {
+
+for (let i = 0; i < folds2.length; i++) {
   //change later to folds2.length
   for (let j = 0; j < coords1.length; j++) {
     let foldValue = folds2[i][1]
@@ -1070,8 +1070,23 @@ for (let i = 0; i < 1; i++) {
   }
 }
 
-console.log(coords1)
 const coords2 = coords1.map(el => `${el[0]},${el[1]}`)
 const coordsNoDuplicates = new Set(coords2)
 console.log(coordsNoDuplicates)
-console.log(coordsNoDuplicates.size)
+
+const matrix = []
+
+for (let i = 0; i < 39; i++) {
+  const row = Array.from({ length: 10 }, () => '-')
+  matrix.push(row)
+}
+
+for (let el of coordsNoDuplicates) {
+  let coords = el.split(',')
+  let x = coords[0]
+  let y = coords[1]
+  matrix[x][y] = '#'
+}
+
+const matrixToString = matrix.map(el => el.join(''))
+console.dir(matrixToString, { maxArrayLength: null }) // Part 2: BCZRCEAB
