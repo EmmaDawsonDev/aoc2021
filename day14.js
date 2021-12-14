@@ -124,36 +124,103 @@ const dataArr = data.split('\n\n')
 let polymerTemplate = dataArr[0]
 const pairInsertion = dataArr[1].split('\n')
 
-for (let i = 0; i < 10; i++) {
-  let newTemplate = ''
-  for (let j = 0; j < polymerTemplate.length - 1; j++) {
-    for (let k = 0; k < pairInsertion.length; k++) {
-      let insertionArr = pairInsertion[k].split(' -> ')
-      let pair = insertionArr[0]
-      let insertLetter = insertionArr[1]
+// for (let i = 0; i < 10; i++) {
+//   let newTemplate = ''
+//   for (let j = 0; j < polymerTemplate.length - 1; j++) {
+//     for (let k = 0; k < pairInsertion.length; k++) {
+//       let insertionArr = pairInsertion[k].split(' -> ')
+//       let pair = insertionArr[0]
+//       let insertLetter = insertionArr[1]
 
-      if (pair === polymerTemplate[j] + polymerTemplate[j + 1] && newTemplate.length === 0) {
-        newTemplate = newTemplate + polymerTemplate[j] + insertLetter + polymerTemplate[j + 1]
-      } else if (pair === polymerTemplate[j] + polymerTemplate[j + 1]) {
-        newTemplate = newTemplate + insertLetter + polymerTemplate[j + 1]
-      }
-    }
-  }
-  polymerTemplate = newTemplate
-}
+//       if (pair === polymerTemplate[j] + polymerTemplate[j + 1] && newTemplate.length === 0) {
+//         newTemplate = newTemplate + polymerTemplate[j] + insertLetter + polymerTemplate[j + 1]
+//         break;
+//       } else if (pair === polymerTemplate[j] + polymerTemplate[j + 1]) {
+//         newTemplate = newTemplate + insertLetter + polymerTemplate[j + 1]
+//         break;
+//       }
+//     }
+//   }
+//   polymerTemplate = newTemplate
+// }
 
-const polymerTemplateHash = {}
+// const polymerTemplateHash = {}
+
+// for (let letter of polymerTemplate) {
+//   if (polymerTemplateHash[letter]) {
+//     polymerTemplateHash[letter]++
+//   } else {
+//     polymerTemplateHash[letter] = 1
+//   }
+// }
+
+// const values = Object.values(polymerTemplateHash)
+// const max = Math.max(...values)
+// const min = Math.min(...values)
+
+// console.log(max - min) // Part 1: 2233
+
+let initialCount = {}
+let initialPairs = {}
+let insertionRules = {}
 
 for (let letter of polymerTemplate) {
-  if (polymerTemplateHash[letter]) {
-    polymerTemplateHash[letter]++
+  if (initialCount[letter]) {
+    initialCount[letter]++
   } else {
-    polymerTemplateHash[letter] = 1
+    initialCount[letter] = 1
   }
 }
 
-const values = Object.values(polymerTemplateHash)
+for (let j = 0; j < polymerTemplate.length - 1; j++) {
+  let pair = polymerTemplate[j] + polymerTemplate[j + 1]
+  if (initialPairs[pair]) {
+    initialPairs[pair]++
+  } else {
+    initialPairs[pair] = 1
+  }
+}
+
+for (let el of pairInsertion) {
+  let instructions = el.split(' -> ')
+  insertionRules[instructions[0]] = instructions[1]
+}
+
+let iteration = 40
+
+for (let i = 0; i < iteration; i++) {
+  let newPairs = {}
+  console.log(initialPairs)
+  for (let el in initialPairs) {
+    let insertionVal = insertionRules[el]
+    let val = initialPairs[el]
+
+    let pair = el.split('')
+    let first = pair[0]
+    let last = pair[1]
+    let firstPair = first + insertionVal
+    let lastPair = insertionVal + last
+    if (newPairs[firstPair]) {
+      newPairs[firstPair] += val
+    } else {
+      newPairs[firstPair] = val
+    }
+    if (newPairs[lastPair]) {
+      newPairs[lastPair] += val
+    } else {
+      newPairs[lastPair] = val
+    }
+
+    initialCount[insertionVal] ? (initialCount[insertionVal] += val) : (initialCount[insertionVal] = 1)
+  }
+  initialPairs = newPairs
+}
+
+console.log(initialPairs)
+console.log(initialCount)
+
+const values = Object.values(initialCount)
 const max = Math.max(...values)
 const min = Math.min(...values)
 
-console.log(max - min) // Part 1: 2233
+console.log(max - min) // Part 2: 2884513602164
